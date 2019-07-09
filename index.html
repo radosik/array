@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <title>compass</title>
+  <script>
+    function mouse_position()
+    {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+
+
+        let e = document.getElementById('e');
+
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        canvas.width = w;
+        canvas.height = h;
+
+        const center = {
+            x: w / 2,
+            y: h / 2
+        }
+
+        const drawCircle = (x,y, a) => {
+            ctx.clearRect(0,0,w,h);      
+
+
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(a);   
+
+            ctx.beginPath(); 
+            ctx.lineWidth = "5";
+            ctx.arc(0, 0, 30, 0, 2 * Math.PI);
+            ctx.stroke();          
+
+            ctx.beginPath();
+            ctx.moveTo(0, -55);
+            ctx.lineTo(0, 55);
+            ctx.stroke();  
+
+            ctx.beginPath();
+            ctx.moveTo(0, -65);
+            ctx.lineTo(10, -35);
+            ctx.lineTo(-10, -35);
+            ctx.fill();
+            
+         
+            ctx.restore();
+        }
+
+        drawCircle(center.x, center.y);
+
+        document.addEventListener('mousemove', function(event) {
+
+            let arrX = event.clientX ;
+            let arrY = event.clientY ;
+
+            x1 = 0;
+            y1 = 65;
+
+            x2 = event.clientX - w/2;
+            y2 = -event.clientY + h/2;
+
+            let angle = Math.acos((x1 * x2 + y1 * y2) / (Math.sqrt(x1 * x1 + y1 * y1) * Math.sqrt(x2 * x2 + y2 * y2)));
+
+            angle = x2 < 0? -angle: angle;
+
+            drawCircle(center.x, center.y, angle);
+
+            e.innerHTML = (event.clientX - w/2) + ' ' + (-event.clientY + h/2) + ' ' + angle / Math.PI * 180;
+        });
+    }
+    </script>
+ </head>
+ <body onload="mouse_position()" style="margin: 0; padding: 0; overflow: hidden;">
+    <div id="e" style="position: absolute; top: 10px; left: 10px;"></div>
+    <canvas id="canvas">
+ </body>
+</html>
